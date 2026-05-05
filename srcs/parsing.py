@@ -17,9 +17,10 @@ def _get_nb_drones(line: str) -> int:
 
 def parse(file_lines: list[str]):
     data: dict[str, int | list[Zone] | list[Connection]] = {}
+    next_line_index: int = 0
 
-    for line in file_lines:
-        if not line or line.startswith("#"):
+    for (i, line) in enumerate(file_lines):
+        if not line.strip() or line.startswith("#"):
             continue
 
         if line.startswith("nb_drones: "):
@@ -29,7 +30,12 @@ def parse(file_lines: list[str]):
                 raise e
 
             data["nb_drones"] = nb_drones
+            next_line_index = i + 1
             break
 
         raise ParsingError("The first line must contain nb_drones: X "
                            "(where X is a positive integer)")
+    
+    for line in file_lines[next_line_index:]:
+        if not line.strip() or line.startswith("#"):
+            continue
