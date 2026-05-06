@@ -36,7 +36,7 @@ class Parser:
             dest = self._zones[zones_name[1]]
         except KeyError as e:
             raise e
-        
+
         if len(connection_data) == 2:
             pass
 
