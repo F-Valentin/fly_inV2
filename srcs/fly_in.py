@@ -1,6 +1,6 @@
 import sys
 
-from parsing import parse, ParsingError
+from parsing import Parser, ParsingError
 
 
 def main() -> None:
@@ -24,9 +24,10 @@ def main() -> None:
     if not file_lines:
         print("The file is empty.")
         sys.exit(1)
+    parser = Parser(file_lines)
     try:
-        parse(file_lines)
-    except ParsingError as e:
+        parser.parse()
+    except (ParsingError, ValueError, KeyError) as e:
         print(e)
         sys.exit(1)
 

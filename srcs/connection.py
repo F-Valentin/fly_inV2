@@ -12,3 +12,16 @@ class Connection:
         self.dest = dest
         self.max_link_capacity = max_link_capacity
         self.waiting_drones: list["Drone"] = []
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Connection):
+            return NotImplemented
+
+        if (self.start.name == other.dest.name and self.dest.name ==
+                other.start.name):
+            return True
+        if (self.start.name == other.start.name and self.dest.name ==
+                other.dest.name):
+            return True
+
+        return False
