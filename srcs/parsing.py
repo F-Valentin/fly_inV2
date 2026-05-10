@@ -31,6 +31,16 @@ class Parser:
         if not line:
             return zone_metadata
 
+        nb_pair_bracket: int = 0
+        for c in line:
+            if c == "[" or c == "]":
+                nb_pair_bracket += 1
+        if nb_pair_bracket != 2 or not line.endswith("]"):
+            raise ParsingError(
+                "The metedata must be between [], "
+                "and it should be only have one [] in the line"
+            )
+
         line = line.strip("[]")
         print(f"line: {line}")
         for data in line.split():
@@ -109,6 +119,18 @@ class Parser:
         return Zone(name, x, y, metadata)
 
     def _parse_connection_metadata(self, line: str) -> int:
+        nb_pair_bracket: int = 0
+
+        for c in line:
+            if c == "[" or c == "]":
+                nb_pair_bracket += 1
+
+        if nb_pair_bracket != 2 or not line.endswith("]"):
+            raise ParsingError(
+                "The metedata must be between [], "
+                "and it should be only have one [] in the line"
+            )
+
         line = line.strip("[]")
         data: list[str] = line.split("=")
 
