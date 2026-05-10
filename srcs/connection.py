@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from zone import Zone
+    from drone import Drone
 
 
 class Connection:
@@ -11,7 +12,7 @@ class Connection:
         self.start = start
         self.dest = dest
         self.max_link_capacity = max_link_capacity
-        self.waiting_drones: list["Drone"] = []
+        self.waiting_drones: list[Drone] = []
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Connection):

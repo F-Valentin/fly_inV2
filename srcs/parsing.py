@@ -32,6 +32,7 @@ class Parser:
             return zone_metadata
 
         line = line.strip("[]")
+        print(f"line: {line}")
         for data in line.split():
             metadata: list[str] = data.split("=")
             if len(metadata) != 2:
@@ -114,7 +115,7 @@ class Parser:
         if data[0].strip() != "max_link_capacity":
             raise ParsingError(
                 "Connection metadata format: "
-                "max_link_capaicty: X (where X is a positive integer), "
+                "max_link_capacity: X (where X is a positive integer), "
                 f"got: {data[0]}")
 
         if len(data) == 2:
@@ -151,7 +152,7 @@ class Parser:
             raise ParsingError(
                 "Connection format: zone1-zone2 [max_link_capacity: X "
                 "(where X is a positive integer) (Optional)], "
-                f"got: {zones_name}"
+                f"got: {connection_data}"
             )
 
         try:
