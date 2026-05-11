@@ -220,6 +220,11 @@ class Parser:
 
             if line.startswith("hub: "):
                 zone = self._parse_zone(line)
+
+                for key in self._zones:
+                    if zone.name == key:
+                        raise ParsingError(f"{zone.name} hub has already been defined")
+
                 self._zones[zone.name] = zone
 
             elif line.startswith("connection: "):
@@ -235,11 +240,21 @@ class Parser:
 
             elif line.startswith("start_hub: "):
                 zone = self._parse_zone(line)
+
+                for key in self._zones:
+                    if zone.name == key:
+                        raise ParsingError(f"{zone.name} hub has already been defined")
+
                 self._zones[zone.name] = zone
                 data["start_hub"] = zone
 
             elif line.startswith("end_hub: "):
                 zone = self._parse_zone(line)
+
+                for key in self._zones:
+                    if zone.name == key:
+                        raise ParsingError(f"{zone.name} hub has already been defined")
+
                 self._zones[zone.name] = zone
                 data["end_hub"] = zone
 
