@@ -7,6 +7,19 @@ class ParsingError(Exception):
 
 
 class Parser:
+    COLORS: dict[str, str] = {
+        "red": "\033[31m",
+        "green": "\033[32m",
+        "yellow": "\033[33m",
+        "blue": "\033[34m",
+        "magenta": "\033[35m",
+        "cyan": "\033[36m",
+        "white": "\033[37m",
+        "gray": "\033[90m",
+        "orange": "\033[38;5;214m",
+        "purple": "\033[38;5;129m",
+    }
+
     def __init__(self, file_lines: list[str]) -> None:
         self._file_lines = file_lines
         self._zones: dict[str, Zone] = {}
@@ -42,7 +55,6 @@ class Parser:
             )
 
         line = line.strip("[]")
-        print(f"line: {line}")
         for data in line.split():
             metadata: list[str] = data.split("=")
             if len(metadata) != 2:
@@ -63,8 +75,16 @@ class Parser:
                         )
 
                     zone_metadata.state = state
+
                 case "color":
-                    zone_metadata.color = value
+                    if value not in Parser.COLORS:
+                        valid: str = ", ".join(Parser.COLORS.keys())
+                        raise ParsingError(
+                            f"Invalid color '{value}'. "
+                            f"Accepted values are: {valid}."
+                        )
+                    zone_metadata.color = Parser.COLORS[value]
+
                 case "max_drones":
                     try:
                         max_drones = int(value)
@@ -218,12 +238,19 @@ class Parser:
                 self._current_line += 1
                 continue
 
-            if line.startswith("hub: "):
+            if line.startswith("hub: ") or line.startswith(
+                    "start_hub: ") or line.startswith("end_hub: "):
                 zone = self._parse_zone(line)
 
                 for key in self._zones:
                     if zone.name == key:
-                        raise ParsingError(f"{zone.name} hub has already been defined")
+                        raise ParsingError(
+                            f"{zone.name} hub has already been defined")
+
+                if line.startswith("start_hub: "):
+                    data["start_hub"] = zone
+                elif line.startswith("end_hub: "):
+                    data["end_hub"] = zone
 
                 self._zones[zone.name] = zone
 
@@ -237,26 +264,6 @@ class Parser:
                             "The connection must be unique.")
 
                 self._connections.append(connection)
-
-            elif line.startswith("start_hub: "):
-                zone = self._parse_zone(line)
-
-                for key in self._zones:
-                    if zone.name == key:
-                        raise ParsingError(f"{zone.name} hub has already been defined")
-
-                self._zones[zone.name] = zone
-                data["start_hub"] = zone
-
-            elif line.startswith("end_hub: "):
-                zone = self._parse_zone(line)
-
-                for key in self._zones:
-                    if zone.name == key:
-                        raise ParsingError(f"{zone.name} hub has already been defined")
-
-                self._zones[zone.name] = zone
-                data["end_hub"] = zone
 
             elif line.startswith("nb_drones: "):
                 raise ParsingError(
