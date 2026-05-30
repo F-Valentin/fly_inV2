@@ -15,7 +15,7 @@ class ZoneState(Enum):
 
 class ZoneMetadata:
     def __init__(self, state: ZoneState = ZoneState.NORMAL,
-                 color: str = "ESC[33m", max_drones: int = 1
+                 color: str = "", max_drones: int = 1
                  ) -> None:
         self.state = state
         self.color = color
@@ -52,16 +52,9 @@ class Zone:
                        connections: list["Connection"],
                        zones: dict[str, "Zone"]
                        ) -> None:
-        from connection import Connection
         for connection in connections:
             if self.name == connection.start.name:
                 self.connections.append(connection)
-                dest = zones[connection.dest.name]
-                dest.connections.append(
-                    Connection(
-                        dest,
-                        self,
-                        connection.max_link_capacity))
 
     def get_cost_or_none(self) -> int | None:
         match self.metadata.state:

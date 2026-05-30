@@ -1,25 +1,26 @@
 from connection import Connection
 from zone import Zone, ZoneMetadata
+from colors import ANSI
+from typing import TypedDict
 
 
 class ParsingError(Exception):
     pass
 
 
-class Parser:
-    COLORS: dict[str, str] = {
-        "red": "\033[31m",
-        "green": "\033[32m",
-        "yellow": "\033[33m",
-        "blue": "\033[34m",
-        "magenta": "\033[35m",
-        "cyan": "\033[36m",
-        "white": "\033[37m",
-        "gray": "\033[90m",
-        "orange": "\033[38;5;214m",
-        "purple": "\033[38;5;129m",
-    }
+class _ParsedDataPartial(TypedDict, total=False):
+    nb_drones: int
+    start_hub: Zone
+    end_hub: Zone
 
+
+class ParsedData(TypedDict):
+    nb_drones: int
+    start_hub: Zone
+    end_hub: Zone
+
+
+class Parser:
     def __init__(self, file_lines: list[str]) -> None:
         self._file_lines = file_lines
         self._zones: dict[str, Zone] = {}
@@ -77,13 +78,13 @@ class Parser:
                     zone_metadata.state = state
 
                 case "color":
-                    if value not in Parser.COLORS:
-                        valid: str = ", ".join(Parser.COLORS.keys())
+                    if value not in ANSI:
+                        valid: str = ", ".join(k for k in ANSI if k != "reset")
                         raise ParsingError(
                             f"Invalid color '{value}'. "
                             f"Accepted values are: {valid}."
                         )
-                    zone_metadata.color = Parser.COLORS[value]
+                    zone_metadata.color = ANSI[value]
 
                 case "max_drones":
                     try:
@@ -210,10 +211,8 @@ class Parser:
 
         return Connection(start, dest)
 
-    def parse(self) -> (
-            dict[str, int | Zone | list[Zone] | list[Connection]]
-    ):
-        data: dict[str, int | Zone | list[Zone] | list[Connection]] = {}
+    def parse(self) -> ParsedData:
+        data: _ParsedDataPartial = {}
 
         for line in self._file_lines:
             if not line.strip() or line.startswith("#"):
@@ -277,13 +276,25 @@ class Parser:
                     "and must be following with :space\n"
                     f"Got: {line}")
             self._current_line += 1
-        try:
-            data["start_hub"]
-            data["end_hub"]
-        except KeyError as e:
-            raise ParsingError(f"The {e} is not declared.")
 
         for zone in self._zones.values():
             zone.add_connection(self._connections, self._zones)
 
-        return data
+        if (
+            "nb_drones" not in data
+                or "start_hub" not in data or "end_hub" not in data):
+            missing = [
+                k for k in (
+                    "nb_drones",
+                    "start_hub",
+                    "end_hub") if k not in data]
+
+            raise ParsingError(
+                f"Missing required fields: {
+                    ', '.join(missing)}")
+
+        return ParsedData(
+            nb_drones=data["nb_drones"],
+            start_hub=data["start_hub"],
+            end_hub=data["end_hub"],
+        )
