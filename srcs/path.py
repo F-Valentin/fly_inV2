@@ -6,6 +6,7 @@ from drone import Drone
 class Path:
     def __init__(self, path: list[Zone], cost: int = 0,
                  nb_of_priority_zones: int = 0) -> None:
+        """Create a path containing zones, cost, and assigned drones."""
         self.path = path
         self.cost = cost
         self.total_cast = 0
@@ -16,6 +17,7 @@ class Path:
         self.calculate_path_cost()
 
     def calculate_path_cost(self) -> None:
+        """Compute the total cost of the path based on zone costs."""
         for zone in self.path[1:]:
             cost = zone.get_cost_or_none()
 
@@ -23,6 +25,7 @@ class Path:
                 self.cost += cost
 
     def find_min_max_drones(self) -> int:
+        """Find the smallest drone capacity across zones in the path."""
         min: int = self.path[0].metadata.max_drones
 
         for zone in self.path[1:]:
@@ -33,6 +36,7 @@ class Path:
 
     def add_drones_until_equalize(
             self, drones: list[Drone], next_path_cost: int) -> int:
+        """Add drones to this path while balancing cost against the next path."""
         max_drones = self.find_min_max_drones()
 
         for (idx, drone) in enumerate(drones):
@@ -75,6 +79,7 @@ class Path:
             i = (i + 1) % paths_len
 
     def calcualte_nb_of_priority_zones_in_path(self) -> None:
+        """Count how many priority zones are present in the path."""
         for zone in self.path:
             if zone.metadata.state == ZoneState.PRIORITY:
                 self.nb_of_priority_zones += 1

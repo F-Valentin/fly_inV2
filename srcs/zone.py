@@ -17,12 +17,14 @@ class ZoneMetadata:
     def __init__(self, state: ZoneState = ZoneState.NORMAL,
                  color: str = "", max_drones: int = 1
                  ) -> None:
+        """Store metadata for a zone, including state, color, and capacity."""
         self.state = state
         self.color = color
         self.max_drones = max_drones
 
     @staticmethod
     def set_state_or_none(zone_state: str) -> ZoneState | None:
+        """Convert a state string to the corresponding ZoneState enum."""
         match zone_state.strip().lower():
             case "normal":
                 return ZoneState.NORMAL
@@ -41,6 +43,7 @@ class Zone:
                  metadata: ZoneMetadata,
                  connections: list[Connection] | None = None
                  ) -> None:
+        """Initialize a zone with coordinates, metadata, and optional connections."""
         self.name: str = name
         self.x = x
         self.y = y
@@ -50,13 +53,14 @@ class Zone:
 
     def add_connection(self,
                        connections: list["Connection"],
-                       zones: dict[str, "Zone"]
                        ) -> None:
+        """Attach all outgoing connections for this zone."""
         for connection in connections:
             if self.name == connection.start.name:
                 self.connections.append(connection)
 
     def get_cost_or_none(self) -> int | None:
+        """Return the traversal cost for this zone, or None if blocked."""
         match self.metadata.state:
             case ZoneState.NORMAL | ZoneState.PRIORITY:
                 return 1

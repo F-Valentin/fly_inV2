@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 
 def main() -> None:
+    """Read maps, parse input, solve paths, and run the drone simulation."""
     # args: list[str] = sys.argv
 
     # if len(args) != 2:

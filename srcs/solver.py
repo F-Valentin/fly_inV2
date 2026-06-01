@@ -3,6 +3,7 @@ from zone import Zone, ZoneState
 
 class Solver:
     def __init__(self) -> None:
+        """Create a solver instance (unused; static methods are provided)."""
         pass
 
     @staticmethod
@@ -34,6 +35,7 @@ class Solver:
 
     @staticmethod
     def dfs(start: Zone, dest: Zone) -> list[list[Zone]]:
+        """Find all valid paths from start to dest using DFS."""
         visited_zone: set[str] = set()
         all_paths: list[list[Zone]] = []
 

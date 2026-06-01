@@ -22,12 +22,14 @@ class ParsedData(TypedDict):
 
 class Parser:
     def __init__(self, file_lines: list[str]) -> None:
+        """Initialize the parser with the map file contents."""
         self._file_lines = file_lines
         self._zones: dict[str, Zone] = {}
         self._connections: list[Connection] = []
         self._current_line: int = 0
 
     def _get_nb_drones(self, line: str) -> int:
+        """Parse the number of drones from the first line of the input."""
         try:
             nb_drones: int = int(line.split(":")[1])
 
@@ -40,6 +42,7 @@ class Parser:
         return nb_drones
 
     def _parse_zone_metadata(self, line: str) -> ZoneMetadata:
+        """Parse optional zone metadata from the hub input line."""
         zone_metadata: ZoneMetadata = ZoneMetadata()
 
         if not line:
@@ -107,6 +110,7 @@ class Parser:
         return zone_metadata
 
     def _parse_zone(self, line: str) -> Zone:
+        """Parse a hub definition line into a Zone object."""
         zone_data: list[str] = line.split(":")[1].rstrip().split()
 
         if not zone_data:
@@ -140,6 +144,7 @@ class Parser:
         return Zone(name, x, y, metadata)
 
     def _parse_connection_metadata(self, line: str) -> int:
+        """Parse optional connection metadata for link capacity."""
         nb_pair_bracket: int = 0
 
         for c in line:
@@ -179,6 +184,7 @@ class Parser:
         return max_link_capacity
 
     def _parse_connection(self, line: str) -> Connection:
+        """Parse a connection line into a Connection object."""
         connection_data: list[str] = line.split(":")[1].rstrip().split()
 
         if not connection_data:
@@ -212,6 +218,7 @@ class Parser:
         return Connection(start, dest)
 
     def parse(self) -> ParsedData:
+        """Parse the map file lines and return structured map data."""
         data: _ParsedDataPartial = {}
 
         for line in self._file_lines:
@@ -278,7 +285,7 @@ class Parser:
             self._current_line += 1
 
         for zone in self._zones.values():
-            zone.add_connection(self._connections, self._zones)
+            zone.add_connection(self._connections)
 
         if (
             "nb_drones" not in data

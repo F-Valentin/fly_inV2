@@ -11,6 +11,7 @@ class SimulationError(Exception):
 
 class Simulation:
     def __init__(self, end_hub: Zone) -> None:
+        """Initialize simulation state for an end hub."""
         self.turn: int = 0
         self.active_connections: list[Connection] = []
         self.end_hub: Zone = end_hub
@@ -118,8 +119,7 @@ class Simulation:
         return movements
 
     def _print_zone_states(self, paths: list[Path]) -> None:
-        """Print which drones currently occupy
-        each zone and each connection."""
+        """Print current occupancy for each zone and active connection."""
         all_drones: list[Drone] = [d for p in paths for d in p.drones]
 
         seen: set[str] = set()
