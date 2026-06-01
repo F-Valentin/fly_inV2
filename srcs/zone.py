@@ -17,7 +17,8 @@ class ZoneMetadata:
     def __init__(self, state: ZoneState = ZoneState.NORMAL,
                  color: str = "", max_drones: int = 1
                  ) -> None:
-        """Store metadata for a zone, including state, color, and capacity."""
+        """Store metadata for a zone,
+        including state, color, and capacity."""
         self.state = state
         self.color = color
         self.max_drones = max_drones
@@ -43,7 +44,8 @@ class Zone:
                  metadata: ZoneMetadata,
                  connections: list[Connection] | None = None
                  ) -> None:
-        """Initialize a zone with coordinates, metadata, and optional connections."""
+        """Initialize a zone with coordinates,
+        metadata, and optional connections."""
         self.name: str = name
         self.x = x
         self.y = y
@@ -60,7 +62,8 @@ class Zone:
                 self.connections.append(connection)
 
     def get_cost_or_none(self) -> int | None:
-        """Return the traversal cost for this zone, or None if blocked."""
+        """Return the traversal cost for this zone,
+        or None if blocked."""
         match self.metadata.state:
             case ZoneState.NORMAL | ZoneState.PRIORITY:
                 return 1

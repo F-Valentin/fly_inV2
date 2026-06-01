@@ -16,7 +16,8 @@ class Connection:
         self.waiting_drones: list[Drone] = []
 
     def __eq__(self, other: object) -> bool:
-        """Compare connections by endpoints, treating reverse links as equal."""
+        """Compare connections by endpoints,
+        treating reverse links as equal."""
         if not isinstance(other, Connection):
             return NotImplemented
 

@@ -36,7 +36,8 @@ class Path:
 
     def add_drones_until_equalize(
             self, drones: list[Drone], next_path_cost: int) -> int:
-        """Add drones to this path while balancing cost against the next path."""
+        """Add drones to this path
+        while balancing cost against the next path."""
         max_drones = self.find_min_max_drones()
 
         for (idx, drone) in enumerate(drones):
