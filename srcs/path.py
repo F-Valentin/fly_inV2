@@ -4,8 +4,7 @@ from drone import Drone
 
 
 class Path:
-    def __init__(self, path: list[Zone], cost: int = 0,
-                 nb_of_priority_zones: int = 0) -> None:
+    def __init__(self, path: list[Zone], cost: int = 0) -> None:
         """Create a path containing zones, cost, and assigned drones."""
         self.path = path
         self.cost = cost
