@@ -1,5 +1,5 @@
 PYTHON = python3
-MAIN = srcs/fly_in.py
+MAIN = fly_in.py
 
 .PHONY: install run debug clean lint lint-strict
 
@@ -19,9 +19,9 @@ clean:
 	find . -name "*.pyc" -delete
 
 lint:
-	flake8 srcs/
-	mypy srcs/ --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+	flake8 .
+	mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	flake8 srcs/*.py
-	mypy srcs/ --strict
+	flake8 .
+	mypy . --strict
