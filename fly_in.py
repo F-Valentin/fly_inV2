@@ -22,7 +22,7 @@ def main() -> None:
 
     # file_name: str = args[1]
     file_path = [
-        # "maps/easy/01_linear_path.txt",
+        "maps/easy/01_linear_path.txt",
         # "maps/easy/02_simple_fork.txt",
         # "maps/easy/03_basic_capacity.txt",
         # "maps/medium/01_dead_end_trap.txt",
@@ -31,7 +31,7 @@ def main() -> None:
         # "maps/hard/01_maze_nightmare.txt",
         # "maps/hard/02_capacity_hell.txt",
         # "maps/hard/03_ultimate_challenge.txt",
-        "maps/challenger/01_the_impossible_dream.txt",
+        # "maps/challenger/01_the_impossible_dream.txt",
     ]
 
     file_lines: list[str]

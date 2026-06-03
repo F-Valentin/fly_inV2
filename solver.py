@@ -11,6 +11,7 @@ class Solver:
                  path: list[Zone], visited_zone: set[str],
                  all_paths: list[list[Zone]]
                  ) -> None:
+        """helper method for dfs"""
 
         path.append(source)
 
