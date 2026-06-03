@@ -46,7 +46,7 @@ class Simulation:
 
         return f"{color_code}{display}{reset}"
 
-    def _process_arrivals(self, drones: list[Drone]) -> list[Drone]:
+    def _process_arrivals(self) -> list[Drone]:
         """Decrement waiting turns and land drones that have arrived."""
         finished_drones: list[Drone] = []
 
@@ -158,7 +158,7 @@ class Simulation:
                 drone.path.extend(path.path)
 
         while drones:
-            finished = self._process_arrivals(drones)
+            finished = self._process_arrivals()
             for d in finished:
                 if d in drones:
                     drones.remove(d)

@@ -29,9 +29,9 @@ def main() -> None:
         # "maps/medium/02_circular_loop.txt",
         # "maps/medium/03_priority_puzzle.txt",
         # "maps/hard/01_maze_nightmare.txt",
-        "maps/hard/02_capacity_hell.txt",
+        # "maps/hard/02_capacity_hell.txt",
         # "maps/hard/03_ultimate_challenge.txt",
-        # "maps/challenger/01_the_impossible_dream.txt",
+        "maps/challenger/01_the_impossible_dream.txt",
     ]
 
     file_lines: list[str]
